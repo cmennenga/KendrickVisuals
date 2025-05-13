@@ -33,16 +33,19 @@
             let dy = this.endY - this.y
             let dist = Math.sqrt(dx*dx + dy*dy)
 
-            if (dist > 1) {
+            if (dist > this.speed) {
                 this.x += this.speed * (dx/dist)
                 this.y += this.speed * (dy/dist)
+            } else {
+                this.x = this.endX
+                this.y = this.endY
             }
         }
 
         // actually creating the dot
         create() {
             ctx.beginPath()
-            ctx.arc(this.x, this.y, 4, 0, 2* Math.PI)
+            ctx.arc(this.x, this.y, 2, 0, 2* Math.PI)
             ctx.fillStyle = 'white'
             ctx.fill()
             ctx.closePath()
@@ -52,21 +55,55 @@
     // creating all my dots
     let dots = []
 
-    for (let i = 0; i<10; i++) {
-        let startX = Math.random() * window.innerWidth
-        let startY = Math.random() * window.innerHeight
+    // for (let i = 0; i<5000; i++) {
+        // let startX = Math.random() * canvas.width
+        // let startY = Math.random() * canvas.height
 
-        let endX = Math.random() * window.innerWidth
-        let endY = Math.random() * window.innerHeight 
+        // let endX = Math.random() * canvas.width
+        // let endY = Math.random() * canvas.height 
 
-        let speed = 1 + Math.random() * 2
+        // let speed = 1 + Math.random() * 2
 
-        dots.push(new Dot(startX, startY, endX, endY, speed))
+        // dots.push(new Dot(startX, startY, endX, endY, speed))
+    // }
+
+     // creating image out of dots 
+    let testImage = new Image()
+    testImage.src = "testimage.jpg"
+    testImage.onload = () => {drawImgAndExtractDots(testImage)}
+
+    // creating image dot function
+    function drawImgAndExtractDots(img) {
+        let offcanvas = document.createElement('canvas')
+        let offctx = offcanvas.getContext("2d")
+        offcanvas.width = testImage.width
+        offcanvas.height = testImage.height
+        offctx.drawImage(img, 0, 0)
+
+        // extract image pixel data
+        let imgData = offctx.getImageData(0, 0, img.width, img.height).data
+
+        // create dot target points
+        for (let y =0; y<img.height; y+=4) {
+            for (let x=0; x<img.width; x+=4) {
+                let index = (y * img.width + x) * 4
+                let a = imgData[index + 3]
+
+                if (a > 0) {
+                    let startX = Math.random() * canvas.width
+                    let startY = Math.random() * canvas.height
+
+                    let speed = 1 + Math.random()
+
+                    dots.push(new Dot(startX, startY, x, y, speed))
+                }
+            }
+        }
     }
 
     // moving the dots 
     function move() {
-        ctx.clearRect(0, 0, window.innerWidth, window.innerHeight)
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
 
         for (let d of dots) {
             d.update()
@@ -74,6 +111,7 @@
         }
         requestAnimationFrame(move)
     }
+
     move()
     </script>
 </body>
