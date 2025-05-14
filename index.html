@@ -70,30 +70,51 @@
      // creating image out of dots 
     let testImage = new Image()
     testImage.src = "testimage.jpg"
-    testImage.onload = () => {drawImgAndExtractDots(testImage)}
+    testImage.onload = () => {drawImgAndExtractDots(testImage); move()}
 
     // creating image dot function
     function drawImgAndExtractDots(img) {
         let offcanvas = document.createElement('canvas')
         let offctx = offcanvas.getContext("2d")
-        offcanvas.width = testImage.width
-        offcanvas.height = testImage.height
-        offctx.drawImage(img, 0, 0)
+        offcanvas.width = canvas.width
+        offcanvas.height = canvas.height
+
+        // Scaling image to fit screen
+        let imgAspect = img.width / img.height
+        let canvasAspect = canvas.width / canvas.height
+        let dx, dy, dWidth, dHeight
+
+        if (imgAspect > canvasAspect) {
+            dWidth = canvas.width
+            dHeight = canvas.width/imgAspect
+            dx = 0
+            dy = (canvas.height - dHeight) / 2
+        } else {
+            dWidth = canvas.height * imgAspect
+            dHeight = canvas.height
+            dx = (canvas.width - dWidth) / 2
+            dy = 0
+        }
+        offctx.drawImage(img, dx, dy, dWidth, dHeight)
 
         // extract image pixel data
-        let imgData = offctx.getImageData(0, 0, img.width, img.height).data
+        let imgData = offctx.getImageData(0, 0, canvas.width, canvas.height).data
 
         // create dot target points
-        for (let y =0; y<img.height; y+=4) {
-            for (let x=0; x<img.width; x+=4) {
-                let index = (y * img.width + x) * 4
-                let a = imgData[index + 3]
+        for (let y =0; y<canvas.height; y+=3) {
+            for (let x=0; x<canvas.width; x+=3) {
+                let index = (y * canvas.width + x) * 4
+                // calculating brightness to find where dots go
+                let r = imgData[index]
+                let g = imgData[index + 1]
+                let b = imgData[index + 2]
+                let brightness = (r+g+b) / 3
 
-                if (a > 0) {
+                if (brightness > 128) {
                     let startX = Math.random() * canvas.width
                     let startY = Math.random() * canvas.height
 
-                    let speed = 1 + Math.random()
+                    let speed = 30
 
                     dots.push(new Dot(startX, startY, x, y, speed))
                 }
@@ -111,7 +132,5 @@
         }
         requestAnimationFrame(move)
     }
-
-    move()
     </script>
 </body>
