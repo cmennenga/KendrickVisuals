@@ -67,10 +67,27 @@
         // dots.push(new Dot(startX, startY, endX, endY, speed))
     // }
 
-     // creating image out of dots 
-    let testImage = new Image()
-    testImage.src = "testimage.jpg"
-    testImage.onload = () => {drawImgAndExtractDots(testImage); move()}
+     // looking at each image
+     let i = 1
+     let n = 15
+     let duration = 5000
+
+     function imageSlideShow () {
+        if (i > n) return;
+
+        dots = []
+
+        let Img = new Image()
+        Img.src = `img${i}.jpg`
+
+         Img.onload = () => {
+            drawImgAndExtractDots(Img); 
+            i++; 
+            setTimeout(imageSlideShow, duration)}
+     }
+
+    move()
+    imageSlideShow()
 
     // creating image dot function
     function drawImgAndExtractDots(img) {
@@ -101,8 +118,8 @@
         let imgData = offctx.getImageData(0, 0, canvas.width, canvas.height).data
 
         // create dot target points
-        for (let y =0; y<canvas.height; y+=3) {
-            for (let x=0; x<canvas.width; x+=3) {
+        for (let y =0; y<canvas.height; y+=4) {
+            for (let x=0; x<canvas.width; x+=4) {
                 let index = (y * canvas.width + x) * 4
                 // calculating brightness to find where dots go
                 let r = imgData[index]
@@ -110,7 +127,7 @@
                 let b = imgData[index + 2]
                 let brightness = (r+g+b) / 3
 
-                if (brightness > 128) {
+                if (brightness > 100) {
                     let startX = Math.random() * canvas.width
                     let startY = Math.random() * canvas.height
 
