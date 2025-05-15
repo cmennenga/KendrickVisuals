@@ -53,7 +53,7 @@
     }
 
     // creating all my dots
-    let dots = []
+    let dots
 
     // for (let i = 0; i<5000; i++) {
         // let startX = Math.random() * canvas.width
@@ -68,26 +68,26 @@
     // }
 
      // looking at each image
-     let i = 1
-     let n = 15
-     let duration = 5000
+    //  let i = 1
+    //  let n = 15
+    //  let duration = 5000
 
-     function imageSlideShow () {
-        if (i > n) return;
+    //  function imageSlideShow () {
+        // if (i > n) return;
 
-        dots = []
+        // dots = []
 
-        let Img = new Image()
-        Img.src = `img${i}.jpg`
+        // let Img = new Image()
+        // Img.src = `img${i}.jpg`
 
-         Img.onload = () => {
-            drawImgAndExtractDots(Img); 
-            i++; 
-            setTimeout(imageSlideShow, duration)}
-     }
+        //  Img.onload = () => {
+            // drawImgAndExtractDots(Img); 
+            // i++; 
+            // setTimeout(imageSlideShow, duration)}
+    //  }
 
-    move()
-    imageSlideShow()
+    // move()
+    // imageSlideShow()
 
     // creating image dot function
     function drawImgAndExtractDots(img) {
@@ -118,8 +118,8 @@
         let imgData = offctx.getImageData(0, 0, canvas.width, canvas.height).data
 
         // create dot target points
-        for (let y =0; y<canvas.height; y+=4) {
-            for (let x=0; x<canvas.width; x+=4) {
+        for (let y =0; y<canvas.height; y+=3) {
+            for (let x=0; x<canvas.width; x+=3) {
                 let index = (y * canvas.width + x) * 4
                 // calculating brightness to find where dots go
                 let r = imgData[index]
@@ -139,9 +139,33 @@
         }
     }
 
+    //setting up music 
+    let music = nn.create('audio')
+        .set('src', '')
+        .addTo('body')
+
+    let justFine = music.el
+
     // moving the dots 
     function move() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        // ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+        let t = justFine.currentTime
+        dots = []
+
+        if (t < 5) {
+            let Img = new Image()
+            Img.src = 'img2.jpg'
+            Img.onload = () => {
+            drawImgAndExtractDots(Img)
+            }
+        } else {
+            let Img = new Image()
+            Img.src = 'img5.jpg'
+            Img.onload = () => {
+            drawImgAndExtractDots(Img)
+            }
+        }
 
         for (let d of dots) {
             d.update()
