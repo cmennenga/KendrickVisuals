@@ -157,7 +157,17 @@
         {time: 14,  mode: 'image',  src: 'img6.jpg'},
         {time: 17,  mode: 'image',  src: 'img9.jpg'},
         {time: 20,  mode: 'fast'},
-        {time: 21,  mode: 'slow'}
+        {time: 21,  mode: 'slow'}, 
+        {time: 22,  mode: 'image',  src: 'img3.jpg'},
+        {time: 26,  mode: 'image',  src: 'img14.jpg'},
+        {time: 30,  mode: 'image',  src: 'img10.jpg'},
+        {time: 34,  mode: 'slow'},
+        {time: 36,  mode: 'image',  src: 'img15.jpg'},
+        {time: 40,  mode: 'image',  src: 'img4.jpg'},
+        {time: 44,  mode: 'fast'},
+        {time: 44.5,  mode: 'image',  src: 'img7.jpg'},
+        {time: 49,  mode: 'image',  src: 'img12.jpg'},
+        {time: 53,  mode: 'slow'}
     ]
 
     let currentVisual = 0
@@ -181,7 +191,7 @@
                 LoadImages(visual.src)
             } else if (visual.mode === 'fast') {
                 for (let d of dots) {
-                    d.speed = 50
+                    d.speed = 70
                     d.randLocation()
                 }
             } else {
