@@ -52,8 +52,16 @@
         }
     }
 
-    // creating all my dots
-    let dots
+    // creating all my dots and music 
+    let dots = []
+    let currImg = ''
+    //setting up music 
+    let music = nn.create('audio').addTo('body')
+    let justFine = music.el
+
+    music.src = 'justFine.mp3'
+    music.loop = true
+
 
     // for (let i = 0; i<5000; i++) {
         // let startX = Math.random() * canvas.width
@@ -139,33 +147,33 @@
         }
     }
 
-    //setting up music 
-    let music = nn.create('audio')
-        .set('src', '')
-        .addTo('body')
+    // loading images and moving dots based off music
+    function LoadImages(t) {
+        let imgToLoad = ''
 
-    let justFine = music.el
+        if (t < 5) {
+            imgToLoad = 'img2.jpg'
+        } else {
+            imgToLoad = 'img5.jpg'
+        }
+
+        if (imgToLoad !== currImg) {
+            currImg = imgToLoad
+            let img = new Image()
+            img.src = imgToLoad
+            img.onload = () => {
+                dots = []
+                drawImgAndExtractDots(img)
+            }
+        }
+    }
 
     // moving the dots 
     function move() {
-        // ctx.clearRect(0, 0, canvas.width, canvas.height)
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-        let t = justFine.currentTime
-        dots = []
-
-        if (t < 5) {
-            let Img = new Image()
-            Img.src = 'img2.jpg'
-            Img.onload = () => {
-            drawImgAndExtractDots(Img)
-            }
-        } else {
-            let Img = new Image()
-            Img.src = 'img5.jpg'
-            Img.onload = () => {
-            drawImgAndExtractDots(Img)
-            }
-        }
+        let t = music.currentTime
+        LoadImages(t)
 
         for (let d of dots) {
             d.update()
@@ -173,5 +181,11 @@
         }
         requestAnimationFrame(move)
     }
+    
+    document.body.addEventListener('click', () => {
+        music.play();
+        move()
+        }
+    )
     </script>
 </body>
