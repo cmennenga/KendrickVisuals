@@ -19,12 +19,24 @@
 
     // creating class for each dot
     class Dot {
-        constructor(startX, startY, endX, endY, speed) {
-            this.x = startX
-            this.y = startY
-            this.endX = endX
-            this.endY = endY
+        constructor(x, y, speed) {
+            this.x = x
+            this.y = y
+            this.endX = x
+            this.endY = y
             this.speed = speed
+        }
+
+        // sets target location to create image
+        Target(x, y) {
+            this.endX = x
+            this.endY = y
+        }
+
+        // sets a random location if not creating an image
+        randLocation() {
+            this.Target(Math.random() * canvas.width, 
+                        Math.random() * canvas.height)
         }
 
         // function called every frame to move dot
@@ -52,50 +64,24 @@
         }
     }
 
-    // creating all my dots and music 
+    // creating all my dots
+    let nDots = 100000 
     let dots = []
+
+    for (let d = 0; d < nDots; d+=1) {
+        let startX = Math.random() * canvas.width
+        let startY = Math.random() * canvas.height
+        dots.push(new Dot(startX, startY, 10))
+    }
+
     let currImg = ''
+
     //setting up music 
     let music = nn.create('audio').addTo('body')
     let justFine = music.el
 
     music.src = 'justFine.mp3'
     music.loop = true
-
-
-    // for (let i = 0; i<5000; i++) {
-        // let startX = Math.random() * canvas.width
-        // let startY = Math.random() * canvas.height
-
-        // let endX = Math.random() * canvas.width
-        // let endY = Math.random() * canvas.height 
-
-        // let speed = 1 + Math.random() * 2
-
-        // dots.push(new Dot(startX, startY, endX, endY, speed))
-    // }
-
-     // looking at each image
-    //  let i = 1
-    //  let n = 15
-    //  let duration = 5000
-
-    //  function imageSlideShow () {
-        // if (i > n) return;
-
-        // dots = []
-
-        // let Img = new Image()
-        // Img.src = `img${i}.jpg`
-
-        //  Img.onload = () => {
-            // drawImgAndExtractDots(Img); 
-            // i++; 
-            // setTimeout(imageSlideShow, duration)}
-    //  }
-
-    // move()
-    // imageSlideShow()
 
     // creating image dot function
     function drawImgAndExtractDots(img) {
@@ -124,11 +110,12 @@
 
         // extract image pixel data
         let imgData = offctx.getImageData(0, 0, canvas.width, canvas.height).data
+        let imgTarget = []
 
         // create dot target points
-        for (let y =0; y<canvas.height; y+=3) {
-            for (let x=0; x<canvas.width; x+=3) {
-                let index = (y * canvas.width + x) * 4
+        for (let w =0; w<canvas.height; w+=3) {
+            for (let z=0; z<canvas.width; z+=3) {
+                let index = (w * canvas.width + z) * 4
                 // calculating brightness to find where dots go
                 let r = imgData[index]
                 let g = imgData[index + 1]
@@ -136,44 +123,74 @@
                 let brightness = (r+g+b) / 3
 
                 if (brightness > 100) {
-                    let startX = Math.random() * canvas.width
-                    let startY = Math.random() * canvas.height
-
-                    let speed = 30
-
-                    dots.push(new Dot(startX, startY, x, y, speed))
+                    imgTarget.push({x: z, y: w})
                 }
+            }
+        }
+
+        // connecting dots to imgTarget
+        for (let i = 0; i < nDots; i+=1) {
+            if (i < imgTarget.length) {
+                dots[i].Target(imgTarget[i].x, imgTarget[i].y)
+            } else {
+                let rand = imgTarget[Math.floor(Math.random() * imgTarget.length)]
+                dots[i].Target(rand.x, rand.y)
             }
         }
     }
 
     // loading images and moving dots based off music
-    function LoadImages(t) {
-        let imgToLoad = ''
-
-        if (t < 5) {
-            imgToLoad = 'img2.jpg'
-        } else {
-            imgToLoad = 'img5.jpg'
-        }
-
-        if (imgToLoad !== currImg) {
-            currImg = imgToLoad
-            let img = new Image()
-            img.src = imgToLoad
-            img.onload = () => {
-                dots = []
-                drawImgAndExtractDots(img)
-            }
+    function LoadImages(image) {
+        let img = new Image()
+        img.src = image
+        img.onload = () => {
+            drawImgAndExtractDots(img)
         }
     }
 
+    // building visual story
+    let story = [
+        {time: 0,   mode: 'random'},
+        {time: 0.05, mode: 'random'},
+        {time: 5,   mode: 'image',  src: 'testimage.jpg'},
+        {time: 10,  mode: 'image',  src: 'img2.jpg'},
+        {time: 14,  mode: 'image',  src: 'img6.jpg'},
+        {time: 17,  mode: 'image',  src: 'img9.jpg'},
+        {time: 20,  mode: 'fast'},
+        {time: 21,  mode: 'slow'}
+    ]
+
+    let currentVisual = 0
     // moving the dots 
     function move() {
         ctx.clearRect(0, 0, canvas.width, canvas.height)
 
         let t = music.currentTime
-        LoadImages(t)
+
+        if (
+            currentVisual < story.length -1 && 
+            t>= story[currentVisual +1].time
+        ) {
+            currentVisual += 1 
+            let visual = story[currentVisual]
+
+            if (visual.mode === 'random') {
+                for (let d of dots) d.randLocation()
+            } else if (visual.mode === 'image') { 
+                for (let d of dots) d.speed = 30
+                LoadImages(visual.src)
+            } else if (visual.mode === 'fast') {
+                for (let d of dots) {
+                    d.speed = 50
+                    d.randLocation()
+                }
+            } else {
+                for (let d of dots) {
+                    d.speed = 0.2
+                    d.randLocation()
+                }
+            }
+        }
 
         for (let d of dots) {
             d.update()
