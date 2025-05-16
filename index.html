@@ -17,6 +17,12 @@
     window.addEventListener('resize', resizeScreen)
     resizeScreen()
 
+    // canvas.style.position = 'absolute'
+    // canvas.style.zIndex = '0'
+    // canvas.style.top = '0'
+    // canvas.style.left = '0'
+    // canvas.style.pointerEvents = 'none'
+
     // creating class for each dot
     class Dot {
         constructor(x, y, speed) {
@@ -65,7 +71,11 @@
     }
 
     // creating all my dots
-    let nDots = 100000 
+    const dotRadius = 2
+    const dotArea = Math.PI * dotRadius * dotRadius
+    const Area = canvas.width * canvas.height
+
+    const nDots = Math.floor((Area / dotArea) * 0.85)
     let dots = []
 
     for (let d = 0; d < nDots; d+=1) {
@@ -220,7 +230,7 @@
         {time: 125.5,  mode: 'image',  src: 'img5.jpg'},
         {time: 126,  mode: 'image',  src: 'img6.jpg'},
         {time: 126.5,  mode: 'image',  src: 'img20.jpg'},
-        {time: 127,  mode: 'image',  src: 'img31.jpg'},
+        {time: 127,  mode: 'image',  src: 'final.jpg'},
         {time: 131,  mode: 'extra slow'},
         {time: 160,  mode: 'extra slow'},
         {time: 180,  mode: 'extra slow'},
@@ -267,7 +277,10 @@
                     d.speed = 60 
                 }
             } else {
-                for (let d of dots) d.speed = 1
+                for (let d of dots) {
+                    d.speed = 1,
+                    d.randLocation()
+                }
             }
         }
 
@@ -277,11 +290,31 @@
         }
         requestAnimationFrame(move)
     }
+
+    const start = document.createElement('button')
+    start.textContent = "start"
+
+    Object.assign(start.style, {
+        fontSize: '20px',
+        padding: '10px 20px',
+        borderRadius: '10px',
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        zIndex: '1000',
+        backgroundColor: 'white',
+        color: 'black',
+        border: 'none', 
+        cursor: 'pointer'
+    })
+
+    document.body.appendChild(start)
     
-    document.body.addEventListener('click', () => {
+    start.addEventListener('click', () => {
         music.play();
-        move()
-        }
-    )
+        move();
+        start.remove();
+    })
     </script>
 </body>
