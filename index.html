@@ -152,22 +152,76 @@
     let story = [
         {time: 0,   mode: 'random'},
         {time: 0.05, mode: 'random'},
-        {time: 5,   mode: 'image',  src: 'testimage.jpg'},
-        {time: 10,  mode: 'image',  src: 'img2.jpg'},
-        {time: 14,  mode: 'image',  src: 'img6.jpg'},
-        {time: 17,  mode: 'image',  src: 'img9.jpg'},
+        {time: 4.5,   mode: 'image',  src: 'testimage.jpg'},
+        {time: 9.5,  mode: 'image',  src: 'img2.jpg'},
+        {time: 13.7,  mode: 'image',  src: 'img6.jpg'},
+        {time: 16.5,  mode: 'image',  src: 'img9.jpg'},
+        {time: 18.5,  mode: 'center'},
+        {time: 19,  mode: 'center'},
+        {time: 19.5,  mode: 'center'},
         {time: 20,  mode: 'fast'},
         {time: 21,  mode: 'slow'}, 
         {time: 23,  mode: 'image',  src: 'img3.jpg'},
         {time: 26,  mode: 'image',  src: 'img14.jpg'},
-        {time: 30,  mode: 'image',  src: 'img10.jpg'},
+        {time: 29,  mode: 'image',  src: 'img10.jpg'},
+        {time: 32,  mode: 'fast'},
+        {time: 32,  mode: 'fast'},
         {time: 34,  mode: 'slow'},
         {time: 36,  mode: 'image',  src: 'img15.jpg'},
         {time: 40,  mode: 'image',  src: 'img4.jpg'},
         {time: 44,  mode: 'fast'},
-        {time: 44.5,  mode: 'image',  src: 'img7.jpg'},
+        {time: 45,  mode: 'image',  src: 'img7.jpg'},
         {time: 49,  mode: 'image',  src: 'img12.jpg'},
-        {time: 53,  mode: 'slow'}
+        {time: 52,  mode: 'fast'},
+        {time: 52.5,  mode: 'slow'},
+        {time: 53,  mode: 'center'},
+        {time: 54,  mode: 'fast'},
+        {time: 55,  mode: 'slow'},
+        {time: 56.5,  mode: 'image',  src: 'img23.jpg'},
+        {time: 59,  mode: 'image',  src: 'img8.jpg'},
+        {time: 62,  mode: 'image',  src: 'img5.jpg'},
+        {time: 65,  mode: 'image',  src: 'img11.jpg'},
+        {time: 68,  mode: 'fast'},
+        {time: 70,  mode: 'fast'},
+        {time: 72,  mode: 'fast'},
+        {time: 74,  mode: 'fast'},
+        {time: 76,  mode: 'image',  src: 'img13.jpg'},
+        {time: 79,  mode: 'image',  src: 'img17.jpg'},
+        {time: 82,  mode: 'image',  src: 'img18.jpg'},
+        {time: 85,  mode: 'image',  src: 'img19.jpg'},
+        {time: 88,  mode: 'center'},
+        {time: 88.5,  mode: 'fast'},
+        {time: 89,  mode: 'center'},
+        {time: 89.5,  mode: 'fast'},
+        {time: 90,  mode: 'image',  src: 'img20.jpg'},
+        {time: 93,  mode: 'image',  src: 'img21.jpg'},
+        {time: 93,  mode: 'image',  src: 'img22.jpg'},
+        {time: 96,  mode: 'fast'},
+        {time: 96.3,  mode: 'fast'},
+        {time: 96.6,  mode: 'fast'},
+        {time: 96.9,  mode: 'fast'},
+        {time: 97.5,  mode: 'slow'},
+        {time: 98,  mode: 'image',  src: 'img24.jpg'},
+        {time: 101,  mode: 'slow'},
+        {time: 102,  mode: 'image',  src: 'img25.jpg'},
+        {time: 105,  mode: 'slow'},
+        {time: 106,  mode: 'image',  src: 'img26.jpg'}, 
+        {time: 109,  mode: 'slow'},
+        {time: 110,  mode: 'image',  src: 'img27.jpg'}, 
+        {time: 113,  mode: 'slow'},
+        {time: 114,  mode: 'image',  src: 'img28.jpg'}, 
+        {time: 117,  mode: 'center'},
+        {time: 117.5,  mode: 'fast'},
+        {time: 118,  mode: 'image',  src: 'img29.jpg'},
+        {time: 121,  mode: 'image',  src: 'img30.jpg'},
+        {time: 124,  mode: 'image',  src: 'img1.jpg'},
+        {time: 125,  mode: 'image',  src: 'img2.jpg'},
+        {time: 126,  mode: 'image',  src: 'im3.jpg'},
+        {time: 127,  mode: 'image',  src: 'img5.jpg'},
+        {time: 128,  mode: 'image',  src: 'img6.jpg'},
+        {time: 129,  mode: 'image',  src: 'img20.jpg'},
+        {time: 130,  mode: 'image',  src: 'img31.jpg'},
+        {time: 132,  mode: 'extra slow'}
     ]
 
     let currentVisual = 0
@@ -194,11 +248,23 @@
                     d.speed = 70
                     d.randLocation()
                 }
-            } else {
+            } else if (visual.mode === 'slow') {
                 for (let d of dots) {
-                    d.speed = 0.2
+                    d.speed = 10
                     d.randLocation()
                 }
+            } else if (visual.mode === 'center') {
+                for (let d of dots) {
+                    let Xmax = 2 * (canvas.width / 3)
+                    let Xmin = canvas.width / 3
+                    let Ymax = 2 * (canvas.height / 3)
+                    let Ymin = canvas.height / 3
+                    d.endX = Math.random() * (Xmin) + (Xmax - Xmin)
+                    d.endY = Math.random() * (Ymin) + (Ymax - Ymin)
+                    d.speed = 60 
+                }
+            } else {
+                for (let d of dots) d.speed = 1
             }
         }
 
