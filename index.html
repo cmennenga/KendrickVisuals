@@ -4,6 +4,7 @@
 
     <script>
     /* global nn */
+    let animationId
 
     nn.get('body').css({ backgroundColor: "black" })
 
@@ -240,7 +241,11 @@
 
         let t = music.currentTime
 
-        if (t >= endMusic) {restart()}
+        if (t >= endMusic) {
+            cancelAnimationFrame(requestAnimationFrame(move))
+            restart()
+            return
+        }
 
         if (
             currentVisual < story.length -1 && 
@@ -286,15 +291,21 @@
             d.update()
             d.create()
         }
-        requestAnimationFrame(move)
+        animationId = requestAnimationFrame(move)
     }
 
     function restart() {
+        cancelAnimationFrame(animationId)
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+
         currentVisual = 0
+        music.pause()
         music.currentTime = 0
 
         for (let d of dots) {
-            d.randLocation()
+            let startX = Math.random() * canvas.width
+            let startY = Math.random() * canvas.height
+            d.Target(startX, startY)
         }
 
         button()
@@ -332,6 +343,6 @@
         restart()
     })
 
-    button()
+        button()
     </script>
 </body>
