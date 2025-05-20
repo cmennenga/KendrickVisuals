@@ -241,6 +241,13 @@
 
         let t = music.currentTime
 
+        let maxDist
+        if (canvas.width > canvas.height) {maxDist = canvas.width}
+        else {maxDist = canvas.height}
+
+        let prevVisual = story[currentVisual - 1]
+        movetime = visual.time - prevVisual.time
+
         if (t >= endMusic) {
             cancelAnimationFrame(requestAnimationFrame(move))
             restart()
@@ -257,23 +264,16 @@
             if (visual.mode === 'random') {
                 for (let d of dots) d.randLocation()
             } else if (visual.mode === 'image') { 
-                let prevVisual = story[currentVisual - 1]
-                imgtime = visual.time - prevVisual.time
-
-                let maxDist
-                if (canvas.width > canvas.height) {maxDist = canvas.width}
-                else {maxDist = canvas.height}
-
-                for (let d of dots) d.speed = (maxDist / imgtime) * .5
+                for (let d of dots) d.speed = (maxDist / movetime) * .5
                 LoadImages(visual.src)
             } else if (visual.mode === 'fast') {
                 for (let d of dots) {
-                    d.speed = 120
+                    d.speed = (maxDist / movetime) * 3
                     d.randLocation()
                 }
             } else if (visual.mode === 'slow') {
                 for (let d of dots) {
-                    d.speed = 30
+                    d.speed = (maxDist / movetime) * .2
                     d.randLocation()
                 }
             } else if (visual.mode === 'center') {
@@ -284,11 +284,11 @@
                     let Ymin = canvas.height / 3
                     d.endX = Math.random() * (Xmin) + (Xmax - Xmin)
                     d.endY = Math.random() * (Ymin) + (Ymax - Ymin)
-                    d.speed = 70 
+                    d.speed = 70
                 }
             } else {
                 for (let d of dots) {
-                    d.speed = 1,
+                    d.speed = 1
                     d.randLocation()
                 }
             }
