@@ -245,8 +245,10 @@
         if (canvas.width > canvas.height) {maxDist = canvas.width}
         else {maxDist = canvas.height}
 
-        let prevVisual = story[currentVisual - 1]
-        movetime = visual.time - prevVisual.time
+        if (currentVisual >= 1) {
+            let prevVisual = story[currentVisual - 1]
+            movetime = visual.time - prevVisual.time
+        }
 
         if (t >= endMusic) {
             cancelAnimationFrame(requestAnimationFrame(move))
