@@ -254,7 +254,6 @@
             currentVisual < story.length && 
             t>= story[currentVisual].time
         ) {
-            currentVisual += 1
             let visual = story[currentVisual] 
             let nextVisual = story[currentVisual + 1]
             let movetime = nextVisual.time - visual.time
@@ -301,6 +300,7 @@
                     d.randLocation()
                 }
             }
+            currentVisual += 1
         }
 
         for (let d of dots) {
