@@ -270,10 +270,12 @@
                 }
                 LoadImages(visual.src)
             } else if (visual.mode === 'fast') {
-                for (let d of dots) {
-                    d.speed = (maxDist / movetime) * .2
-                    d.randLocation()
+                if ((movetime) >= 3) { 
+                    for (let d of dots) d.speed = (maxDist / movetime) * .2
+                } else {
+                    for (let d of dots) d.speed = 100
                 }
+                d.randLocation()
             } else if (visual.mode === 'slow') {
                 for (let d of dots) {
                     d.speed = 30
