@@ -257,11 +257,11 @@
             if (visual.mode === 'random') {
                 for (let d of dots) d.randLocation()
             } else if (visual.mode === 'image') { 
-                for (let d of dots) d.speed = 60
+                for (let d of dots) d.speed = 80
                 LoadImages(visual.src)
             } else if (visual.mode === 'fast') {
                 for (let d of dots) {
-                    d.speed = 100
+                    d.speed = 120
                     d.randLocation()
                 }
             } else if (visual.mode === 'slow') {
@@ -277,7 +277,7 @@
                     let Ymin = canvas.height / 3
                     d.endX = Math.random() * (Xmin) + (Xmax - Xmin)
                     d.endY = Math.random() * (Ymin) + (Ymax - Ymin)
-                    d.speed = 60 
+                    d.speed = 70 
                 }
             } else {
                 for (let d of dots) {
