@@ -245,6 +245,8 @@
         if (canvas.width > canvas.height) {maxDist = canvas.width}
         else {maxDist = canvas.height}
 
+        let visual = story[currentVisual]
+
         if (currentVisual >= 1) {
             let prevVisual = story[currentVisual - 1]
             movetime = visual.time - prevVisual.time
@@ -261,7 +263,6 @@
             t>= story[currentVisual +1].time
         ) {
             currentVisual += 1 
-            let visual = story[currentVisual]
 
             if (visual.mode === 'random') {
                 for (let d of dots) d.randLocation()
