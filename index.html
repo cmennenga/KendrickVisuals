@@ -244,16 +244,17 @@
         if (canvas.width > canvas.height) {maxDist = canvas.width}
         else {maxDist = canvas.height}
 
-        if (t >= endMusic && currentVisual += 1) {
+        if (t >= endMusic && currentVisual >= 1) {
             cancelAnimationFrame(animationId)
             restart()
             return
         }
 
-        if (
+        else if (
             currentVisual < story.length && 
             t>= story[currentVisual].time
         ) {
+            currentVisual += 1
             let visual = story[currentVisual] 
             let nextVisual = story[currentVisual + 1]
             let movetime = nextVisual ? (nextVisual.time - visual.time) : 1
@@ -300,7 +301,6 @@
                     d.randLocation()
                 }
             }
-            currentVisual += 1
         }
 
         for (let d of dots) {
