@@ -257,7 +257,14 @@
             if (visual.mode === 'random') {
                 for (let d of dots) d.randLocation()
             } else if (visual.mode === 'image') { 
-                for (let d of dots) d.speed = 80
+                let prevVisual = story[currentVisual - 1]
+                imgtime = visual.time - prevVisual.time
+
+                let maxDist
+                if (canvas.width > canvas.height) {maxDist = canvas.width}
+                else {maxDist = canvas.height}
+
+                for (let d of dots) d.speed = (maxDist / imgtime) * .5
                 LoadImages(visual.src)
             } else if (visual.mode === 'fast') {
                 for (let d of dots) {
