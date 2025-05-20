@@ -262,7 +262,8 @@
             currentVisual < story.length -1 && 
             t>= story[currentVisual +1].time
         ) {
-            currentVisual += 1 
+            currentVisual += 1
+            visual = story[currentVisual] 
 
             if (visual.mode === 'random') {
                 for (let d of dots) d.randLocation()
