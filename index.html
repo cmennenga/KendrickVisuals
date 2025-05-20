@@ -78,7 +78,7 @@
     for (let d = 0; d < nDots; d+=1) {
         let startX = Math.random() * canvas.width
         let startY = Math.random() * canvas.height
-        dots.push(new Dot(startX, startY, 10))
+        dots.push(new Dot(startX, startY, 30))
     }
 
     let currImg = ''
@@ -257,16 +257,16 @@
             if (visual.mode === 'random') {
                 for (let d of dots) d.randLocation()
             } else if (visual.mode === 'image') { 
-                for (let d of dots) d.speed = 30
+                for (let d of dots) d.speed = 60
                 LoadImages(visual.src)
             } else if (visual.mode === 'fast') {
                 for (let d of dots) {
-                    d.speed = 70
+                    d.speed = 100
                     d.randLocation()
                 }
             } else if (visual.mode === 'slow') {
                 for (let d of dots) {
-                    d.speed = 10
+                    d.speed = 30
                     d.randLocation()
                 }
             } else if (visual.mode === 'center') {
