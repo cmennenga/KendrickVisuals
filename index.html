@@ -174,7 +174,6 @@
         {time: 26,  mode: 'image',  src: 'img14.jpg'},
         {time: 29,  mode: 'image',  src: 'img10.jpg'},
         {time: 32,  mode: 'fast'},
-        {time: 32,  mode: 'fast'},
         {time: 34,  mode: 'slow'},
         {time: 36,  mode: 'image',  src: 'img15.jpg'},
         {time: 40,  mode: 'image',  src: 'img4.jpg'},
@@ -253,7 +252,7 @@
 
         if (
             currentVisual < story.length && 
-            t>= story[currentVisual +1].time
+            t>= story[currentVisual].time
         ) {
             currentVisual += 1
             let visual = story[currentVisual] 
@@ -275,7 +274,7 @@
                 for (let d of dots) {
                     if ((movetime) >= 3) {
                         d.speed = (maxDist / movetime) * .2
-                         d.randLocation()
+                        d.randLocation()
                     } else {
                         d.speed = 100
                         d.randLocation()
