@@ -263,8 +263,13 @@
 
             if (visual.mode === 'random') {
                 for (let d of dots) d.randLocation()
-            } else if (visual.mode === 'image') { 
-                for (let d of dots) d.speed = (maxDist / movetime) * .5
+            } else if (visual.mode === 'image') {
+                let nextTime = story[currentVisual + 1]
+                if ((nextTime.time - visual.time) >= 3) {
+                    for (let d of dots) d.speed = (maxDist / movetime) * .2
+                } else {
+                    for (let d of dots) d.speed = 60
+                }
                 LoadImages(visual.src)
             } else if (visual.mode === 'fast') {
                 for (let d of dots) {
