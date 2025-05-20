@@ -4,6 +4,7 @@
 
     <script>
     /* global nn */
+
     nn.get('body').css({ backgroundColor: "black" })
 
     const canvas  = document.getElementById("myCanvas")
@@ -17,11 +18,6 @@
     window.addEventListener('resize', resizeScreen)
     resizeScreen()
 
-    // canvas.style.position = 'absolute'
-    // canvas.style.zIndex = '0'
-    // canvas.style.top = '0'
-    // canvas.style.left = '0'
-    // canvas.style.pointerEvents = 'none'
 
     // creating class for each dot
     class Dot {
@@ -91,7 +87,9 @@
     let justFine = music.el
 
     music.src = 'justFine.mp3'
-    music.loop = true
+    music.loop = false
+
+
 
     // creating image dot function
     function drawImgAndExtractDots(img) {
@@ -231,18 +229,18 @@
         {time: 126,  mode: 'image',  src: 'img6.jpg'},
         {time: 126.5,  mode: 'image',  src: 'img20.jpg'},
         {time: 127,  mode: 'image',  src: 'final.jpg'},
-        {time: 130,  mode: 'extra slow'},
-        {time: 160,  mode: 'extra slow'},
-        {time: 180,  mode: 'extra slow'},
-        {time: 200,  mode: 'extra slow'}
+        {time: 130,  mode: 'extra slow'}
     ]
 
     let currentVisual = 0
+    let endMusic = 140
     // moving the dots 
     function move() {
         ctx.clearRect(0, 0, canvas.width, canvas.height)
 
         let t = music.currentTime
+
+        if (t >= endMusic) {restart()}
 
         if (
             currentVisual < story.length -1 && 
@@ -291,30 +289,49 @@
         requestAnimationFrame(move)
     }
 
-    const start = document.createElement('button')
-    start.textContent = "start"
+    function restart() {
+        currentVisual = 0
+        music.currentTime = 0
 
-    Object.assign(start.style, {
-        fontSize: '20px',
-        padding: '10px 20px',
-        borderRadius: '10px',
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        zIndex: '1000',
-        backgroundColor: 'white',
-        color: 'black',
-        border: 'none', 
-        cursor: 'pointer'
+        for (let d of dots) {
+            d.randLocation()
+        }
+
+        button()
+    }
+
+    function button() {
+        const start = document.createElement('button')
+        start.textContent = "start"
+
+        Object.assign(start.style, {
+            fontSize: '20px',
+            padding: '10px 20px',
+            borderRadius: '10px',
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            zIndex: '1000',
+            backgroundColor: 'white',
+            color: 'black',
+            border: 'none', 
+            cursor: 'pointer'
+        })
+
+        document.body.appendChild(start)
+
+        start.addEventListener('click', () => {
+            music.play();
+            move();
+            start.remove();
+        })
+    }
+
+    music.addEventListener('ended', () => {
+        restart()
     })
 
-    document.body.appendChild(start)
-    
-    start.addEventListener('click', () => {
-        music.play();
-        move();
-        start.remove();
-    })
+    button()
     </script>
 </body>
