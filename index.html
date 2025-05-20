@@ -245,13 +245,6 @@
         if (canvas.width > canvas.height) {maxDist = canvas.width}
         else {maxDist = canvas.height}
 
-        let visual = story[currentVisual]
-
-        if (currentVisual >= 1) {
-            let prevVisual = story[currentVisual - 1]
-            let movetime = visual.time - prevVisual.time
-        }
-
         if (t >= endMusic) {
             cancelAnimationFrame(requestAnimationFrame(move))
             restart()
@@ -264,6 +257,8 @@
         ) {
             currentVisual += 1
             visual = story[currentVisual] 
+            let prevVisual = story[currentVisual - 1]
+            let movetime = visual.time - prevVisual.time
 
             if (visual.mode === 'random') {
                 for (let d of dots) d.randLocation()
