@@ -229,7 +229,8 @@
         {time: 126,  mode: 'image',  src: 'img6.jpg'},
         {time: 126.5,  mode: 'image',  src: 'img20.jpg'},
         {time: 127,  mode: 'image',  src: 'final.jpg'},
-        {time: 130,  mode: 'extra slow'}
+        {time: 130,  mode: 'extra slow'},
+        {time: 140,  mode: 'extra slow'}
     ]
 
     let currentVisual = 0
@@ -254,6 +255,7 @@
             currentVisual < story.length && 
             t>= story[currentVisual].time
         ) {
+            currentVisual += 1
             let visual = story[currentVisual] 
             let nextVisual = story[currentVisual + 1]
             let movetime = nextVisual.time - visual.time
@@ -300,7 +302,6 @@
                     d.randLocation()
                 }
             }
-            currentVisual += 1
         }
 
         for (let d of dots) {
