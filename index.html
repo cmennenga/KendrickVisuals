@@ -246,13 +246,13 @@
         else {maxDist = canvas.height}
 
         if (t >= endMusic) {
-            cancelAnimationFrame(requestAnimationFrame(move))
+            cancelAnimationFrame(animationId)
             restart()
             return
         }
 
         if (
-            currentVisual < story.length -1 && 
+            currentVisual < story.length && 
             t>= story[currentVisual +1].time
         ) {
             currentVisual += 1
@@ -263,19 +263,24 @@
             if (visual.mode === 'random') {
                 for (let d of dots) d.randLocation()
             } else if (visual.mode === 'image') {
-                if ((movetime) >= 3) {
-                    for (let d of dots) d.speed = (maxDist / movetime) * .2
-                } else {
-                    for (let d of dots) d.speed = 60
+                for (let d of dots) {
+                    if ((movetime) >= 3) {
+                        d.speed = (maxDist / movetime) * .2
+                    } else {
+                        d.speed = 60
+                    }
                 }
                 LoadImages(visual.src)
             } else if (visual.mode === 'fast') {
-                if ((movetime) >= 3) { 
-                    for (let d of dots) d.speed = (maxDist / movetime) * .2
-                } else {
-                    for (let d of dots) d.speed = 100
+                for (let d of dots) {
+                    if ((movetime) >= 3) {
+                        d.speed = (maxDist / movetime) * .2
+                         d.randLocation()
+                    } else {
+                        d.speed = 100
+                        d.randLocation()
+                    }
                 }
-                d.randLocation()
             } else if (visual.mode === 'slow') {
                 for (let d of dots) {
                     d.speed = 30
